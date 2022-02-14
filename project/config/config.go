@@ -8,8 +8,20 @@ import (
 var Config *config
 
 type config struct {
+	App   *App
 	Mysql *Mysql
 }
+
+type App struct {
+	Env  string
+	Port string
+}
+
+const (
+	EnvLocal = "local"
+	EnvDev   = "develop"
+	EnvPrd   = "product"
+)
 
 type Mysql struct {
 	DBTCPHost              string
@@ -22,6 +34,10 @@ type Mysql struct {
 
 func InitConfig() {
 	Config = &config{
+		App: &App{
+			Env:  os.Getenv("APP_ENV"),
+			Port: mustGetenv("APP_PORT"),
+		},
 		Mysql: &Mysql{
 			Port:                   mustGetenv("DB_PORT"),
 			User:                   mustGetenv("DB_USER"),
